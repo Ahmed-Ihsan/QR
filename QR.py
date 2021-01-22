@@ -1,7 +1,9 @@
 import tkinter as tk
+from tkinter import *   
 import qrcode
-from PIL import ImageTk, Image
+from openpyxl import Workbook
 from sqlalchemy import *
+from PIL import ImageTk, Image
 import os
 
 # define the name of the directory to be deleted
@@ -23,7 +25,24 @@ users = Table('users', metadata,
 metadata.create_all(engine)
 ins = users.insert()
 x=None
-def evaluate(event):
+
+def aa2():
+	workbook = Workbook()
+	sheet = workbook.active
+	workbook.save(filename="db.xlsx")
+	conn = engine.connect()
+    # The result of a "cursor.execute" can be iterated over by row
+	x=1
+	for row in conn.execute('SELECT * FROM users;'):
+		sheet["A"+str(x)] = str(row.name)
+		sheet["B"+str(x)] = str(row.number)
+		sheet["c"+str(x)] = str(row.code)
+		x=x+1
+	conn.close()
+	workbook.save(filename="db.xlsx")
+	res.configure(text = "تم استخراج البيانات")
+
+def evaluate():
 	try:
 		if variable.get() and int(entry2.get()):
 			# The result of a "cursor.execute" can be iterated over by row
@@ -89,26 +108,36 @@ def helloCallBack():
 	res.configure(text = "تم استخراج البيانات ")
     
 w = tk.Tk()
+#w.geometry("200x350")
 w.title("كلية الحكمة الجامعة ")
-tk.Label(w, text="اسم المادة").pack()
+tk.Label(w, text="اسم المادة").grid()
 variable = tk.StringVar(w)
-variable.set("حاسبات")
-r = tk.OptionMenu(w, variable, "حاسبات", "طابعة", "راوتر")
-r.pack()
-tk.Label(w, text="العدد").pack()
-entry2 = tk.Entry(w,width=40)
+variable.set("حاسبات" )
+r = tk.OptionMenu(w, variable,"حاسبات","طابعة","راوتر" )
+r.grid()
+tk.Label(w, text="العدد").grid()
+entry2 = tk.Entry(w,width=30)
 entry2.bind("<Return>", evaluate)
-entry2.pack()
-tk.Label(w, text="الرمز").pack()
-entry3 = tk.Entry(w,width=40)
+entry2.grid()
+tk.Label(w, text="الرمز").grid()
+entry3 = tk.Entry(w,width=30)
 entry3.bind("<Return>", evaluate)
-entry3.pack()
-tk.Label(w, text=" ").pack()
-B = tk.Button(w, text ="استخراج البيانات", command = helloCallBack)
-B.pack()
+entry3.grid()
+tk.Label(w, text=" ").grid()
+B = tk.Button(w, text ="ادخال", command = evaluate)
+B.grid()
+tk.Label(w,text="").grid()
+o = tk.Button(w, text ="Excel", command = aa2)
+o.grid()
+tk.Label(w,text="").grid()
+c = tk.Button(w, text ="Text", command = helloCallBack)
+c.grid()
 res = tk.Label(w)
-res.pack()
-img = ImageTk.PhotoImage(Image.open("a.png"))
-panel = tk.Label(w, image = img)
-panel.pack(side = "bottom", fill = "both", expand = "yes")
+res.grid()
+load = Image.open("b.png")
+render = ImageTk.PhotoImage(load)
+label1 = tk.Label(image=render)
+label1.image = render
+label1.grid()
+
 w.mainloop()
