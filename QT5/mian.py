@@ -2,10 +2,11 @@ import sys
 from PySide2.QtUiTools import QUiLoader
 from PyQt5.QtWidgets import QApplication  
 from PySide2.QtCore import QFile, QIODevice
+from openpyxl import Workbook
 import qrcode
 from sqlalchemy import *
 import os
-
+import random
 path = "QR_images"
 try:
     os.mkdir(path)
@@ -25,6 +26,7 @@ metadata.create_all(engine)
 ins = users.insert()
 x=None
 
+
 def aa():
 
     conn = engine.connect()
@@ -37,6 +39,22 @@ def aa():
     # Be sure to close the connection
     conn.close()
 
+def aa2():
+	workbook = Workbook()
+	sheet = workbook.active
+	workbook.save(filename="db.xlsx")
+	conn = engine.connect()
+    # The result of a "cursor.execute" can be iterated over by row
+	x=1
+	for row in conn.execute('SELECT * FROM users;'):
+		sheet["A"+str(x)] = str(row.name)
+		sheet["B"+str(x)] = str(row.number)
+		sheet["c"+str(x)] = str(row.code)
+		x=x+1
+	conn.close()
+	workbook.save(filename="db.xlsx")
+	
+    
 
 def foo():
     print( 1, 2)
@@ -102,8 +120,8 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     window.pushButton.clicked.connect(foo)
-    
     window.pushButton_2.clicked.connect(aa)
+    window.pushButton_3.clicked.connect(aa2)
 
     window.show()
 
