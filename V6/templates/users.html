@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Users</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Users</h1>
+    <ul>
+      {% for user in users %}
+      <li>
+        Name: {{ user.name }} | Place: {{ user.place }} | Topic: {{ user.topic
+        }} | Created At: {{ user.created_at }}
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

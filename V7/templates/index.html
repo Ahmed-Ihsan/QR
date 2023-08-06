@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Personalized QR Code Generator</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Generate Personalized QR Code</h1>
+    <form action="/" method="post">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required /><br />
+
+      <label for="place">Place:</label>
+      <input type="text" id="place" name="place" required /><br />
+
+      <label for="topic">Topic:</label>
+      <input type="text" id="topic" name="topic" required /><br />
+
+      <label for="version">QR Code Version (1 to 40):</label>
+      <input
+        type="number"
+        id="version"
+        name="version"
+        min="1"
+        max="40"
+        value="1"
+        required
+      /><br />
+
+      <label for="box_size">Box Size (pixels):</label>
+      <input
+        type="number"
+        id="box_size"
+        name="box_size"
+        min="1"
+        max="20"
+        value="10"
+        required
+      /><br />
+
+      <label for="border">Border (modules):</label>
+      <input
+        type="number"
+        id="border"
+        name="border"
+        min="1"
+        max="10"
+        value="4"
+        required
+      /><br />
+
+      <input type="submit" value="Generate QR Code" />
+    </form>
+
+    <p>
+      Click <a href="{{ url_for('show_users') }}">here</a> to view all users.
+    </p>
+
+    <script>
+      function showConfirmation() {
+        return confirm("Are you sure you want to generate the QR code?");
+      }
+    </script>
+  </body>
+</html>
